@@ -83,8 +83,8 @@ public class PostsController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public String delete(@PathVariable Long id){
-        postService.deleteById(id);
+    public String delete(@PathVariable Long id, HttpSession session) {
+        postService.deleteById(id, getUserFromSession(session).getId());
         return "redirect:/";
     }
     @GetMapping("/edit/{post_id}")

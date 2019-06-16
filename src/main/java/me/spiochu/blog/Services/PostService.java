@@ -56,8 +56,14 @@ public class PostService {
         return postRepository.saveAndFlush(post);
     }
 
-    public void deleteById(Long id) {
-        postRepository.deleteById(id);
+    public void deleteById(Long postId, Long userId) {
+        if (userRepository.existsById(userId)) {
+            User user = userRepository.findFirstById(userId);
+            if (user == postRepository.findFirstById(postId).getUser()
+                    || user.getRoles().stream().anyMatch(role -> role.getRole_name().equals("ADMIN"))) {
+                postRepository.deleteById(postId);
+            }
+        }
     }
 
     public void updatePost(Long post_id, Post new_post) {

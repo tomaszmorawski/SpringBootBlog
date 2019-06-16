@@ -35,14 +35,7 @@ public class PostsController {
         return "posts";
     }
 
-    private User getUserFromSession(HttpSession httpSession) {
-        User user = (User) httpSession.getAttribute("user");
-        if (user == null){
-            user = new User();
-            user.setEmail("Niezalogowany");
-        }
-        return user;
-    }
+
 
     @GetMapping("/addPost")
     public String addPost(Model model, HttpSession session) {
@@ -116,4 +109,13 @@ public class PostsController {
         return "redirect:/";
     }
 
+    private User getUserFromSession(HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("user");
+        if (user == null) {
+            user = new User();
+            user.setId(-1L);
+            user.setEmail("Niezalogowany");
+        }
+        return user;
+    }
 }

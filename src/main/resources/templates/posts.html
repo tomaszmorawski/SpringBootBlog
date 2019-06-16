@@ -44,8 +44,11 @@
             <a class="nav-link" th:href="@{/contact}">Contact</a>
           </li>
 
-          <li class="nav-item">
-            <a type="button" class="btn btn-light" href="/logout">Logout</a>
+          <li class="nav-item" th:if="${user.id} != -1">
+            <a type="button" class="btn btn-outline-light" href="/logout">Logout</a>
+          </li>
+          <li class="nav-item" th:if="${user.id} == -1">
+            <a type="button" class="btn btn-outline-light" href="/login">Login</a>
           </li>
 
         </ul>
@@ -60,8 +63,8 @@
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
           <div class="site-heading">
-            <h1>Clean Blog</h1>
-            <span class="subheading">A Blog Theme by Start Bootstrap</span>
+            <h1>My Java Blog</h1>
+            <span class="subheading">Mój blog stworzony w języku Java za pomocą Spring Boot'a</span>
           </div>
         </div>
       </div>

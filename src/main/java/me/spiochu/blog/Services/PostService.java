@@ -1,6 +1,5 @@
 package me.spiochu.blog.Services;
 
-import javafx.geometry.Pos;
 import me.spiochu.blog.model.Comment;
 import me.spiochu.blog.model.Post;
 import me.spiochu.blog.model.User;
@@ -27,13 +26,13 @@ public class PostService {
         this.userRepository = userRepository;
     }
 
-    public List<Post> getAll(){
+    public List<Post> getAll() {
         return postRepository.findAll();
     }
 
     public Post getPost(Long id) {
 //        if (postRepository.findById(id).isPresent()){
-            return postRepository.getOne(id);
+        return postRepository.getOne(id);
 //        }
 //        return new Post();
     }

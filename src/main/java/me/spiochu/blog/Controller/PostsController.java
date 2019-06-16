@@ -84,18 +84,21 @@ public class PostsController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public String delete(@PathVariable Long id, HttpSession session) {
-        Optional<Long> userId = Optional.of(getUserFromSession(session).getId());
-        userId.ifPresent(uId -> postService.deleteById(id, uId));
+    public String delete(@PathVariable Long id, HttpSession session, Model model) {
+        Optional<User> user = Optional.of(getUserFromSession(session));
+        model.addAttribute("user", user.get());
+        if (user.get().getId() != null) {
+            postService.deleteById(id, user.get().getId());
+        }
         return "redirect:/";
     }
 
     @GetMapping("/edit/{post_id}")
     public String editPost(@PathVariable Long post_id, Model model, HttpSession session) {
-        Optional<Long> user = Optional.of(getUserFromSession(session).getId());
+        Optional<User> user = Optional.of(getUserFromSession(session));
         model.addAttribute("user", getUserFromSession(session));
-        if (user.isPresent()) {
-            if (postService.isOwner(post_id, user.get())) {
+        if (user.get().getId() != null) {
+            if (postService.isOwner(post_id, user.get().getId())) {
                 List<CategoryEnum> categoryEnum = new ArrayList<>(Arrays.asList(CategoryEnum.values()));
                 model.addAttribute("categoryList", categoryEnum);
                 Post post = postService.getPost(post_id);

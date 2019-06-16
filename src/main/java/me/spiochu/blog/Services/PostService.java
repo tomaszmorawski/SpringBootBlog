@@ -57,6 +57,7 @@ public class PostService {
     }
 
     public void deleteById(Long postId, Long userId) {
+
         if (userRepository.existsById(userId)) {
             User user = userRepository.findFirstById(userId);
             if (user == postRepository.findFirstById(postId).getUser()

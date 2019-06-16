@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class PostsController {
@@ -84,16 +85,26 @@ public class PostsController {
 
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable Long id, HttpSession session) {
-        postService.deleteById(id, getUserFromSession(session).getId());
+        Optional<Long> userId = Optional.of(getUserFromSession(session).getId());
+        userId.ifPresent(uId -> postService.deleteById(id, uId));
         return "redirect:/";
     }
+
     @GetMapping("/edit/{post_id}")
-    public String editPost(@PathVariable Long post_id,Model model){
-        List<CategoryEnum> categoryEnum = new ArrayList<>(Arrays.asList(CategoryEnum.values()));
-        model.addAttribute("categoryList",categoryEnum);
-        Post post = postService.getPost(post_id);
-        model.addAttribute("post",post);
-        return "edit";
+    public String editPost(@PathVariable Long post_id, Model model, HttpSession session) {
+        Optional<Long> user = Optional.of(getUserFromSession(session).getId());
+        model.addAttribute("user", getUserFromSession(session));
+        if (user.isPresent()) {
+            if (postService.isOwner(post_id, user.get())) {
+                List<CategoryEnum> categoryEnum = new ArrayList<>(Arrays.asList(CategoryEnum.values()));
+                model.addAttribute("categoryList", categoryEnum);
+                Post post = postService.getPost(post_id);
+                model.addAttribute("post", post);
+                return "edit";
+            }
+
+        }
+        return "redirect:/";
     }
 
     @PutMapping("/edit/{post_id}")

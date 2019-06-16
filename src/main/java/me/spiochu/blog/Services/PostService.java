@@ -73,4 +73,8 @@ public class PostService {
         post.setCategory(new_post.getCategory());
         postRepository.saveAndFlush(post);
     }
+
+    public boolean isOwner(Long post_id, Long userId) {
+        return postRepository.findFirstById(post_id).getUser().getId().equals(userId);
+    }
 }

@@ -27,7 +27,10 @@ public class UserController {
         model.addAttribute("user", user);
         if (user.getId().equals(-1L)) {
             model.addAttribute("newuser", new User());
-            return "singup";
+            model.addAttribute("content", "singup");
+            model.addAttribute("header", "headersingup");
+
+            return "index";
         }
         return "redirect:/";
     }
@@ -35,7 +38,10 @@ public class UserController {
     @PostMapping("/adduser")
     public String addUser(@Valid User newUser, BindingResult result, Model model, HttpSession session) {
         if (result.hasErrors()) {
-            return "singup";
+            model.addAttribute("content", "singup");
+            model.addAttribute("header", "headersingup");
+
+            return "index";
         }
 
         userService.addUser(newUser);

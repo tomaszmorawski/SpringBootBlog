@@ -32,9 +32,9 @@ public class PostsController {
         User user = getUserFromSession(httpSession);
         model.addAttribute("user",user);
         model.addAttribute("posts",posts);
+
         model.addAttribute("content", "multipostcontent");
         model.addAttribute("header", "headermultipost");
-
         return "index";
     }
 
@@ -81,8 +81,13 @@ public class PostsController {
     }
 
     @GetMapping("/contact")
-    public String contact(){
-        return "contact";
+    public String contact(Model model, HttpSession httpSession) {
+        User user = getUserFromSession(httpSession);
+        model.addAttribute("user", user);
+
+        model.addAttribute("content", "contact");
+        model.addAttribute("header", "headercontact");
+        return "index";
     }
 
     @DeleteMapping("/delete/{id}")

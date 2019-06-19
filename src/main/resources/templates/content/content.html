@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<!--addpost fragment-->
+<div class="container" th:fragment="addpost">
+    <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+            <form th:action="@{'/addPost/'+${user.id}}"
+                  th:object="${post}"
+                  th:method="post"
+                  name="sentMessage" id="contactForm" novalidate>
+                <div class="form-group">
+                    <label for="testarea1">Title</label>
+                    <input type="text"
+                           th:field="*{title}"
+                           class="form-control"
+                           placeholder="input your comment"
+                           id="testarea1"
+                           required
+                           data-validation-required-message="Please input your message"
+                           rows="3">
+                </div>
+                <div class="form-group">
+                    <label for="testarea2">Content</label>
+                    <textarea
+                            th:field="*{content}"
+                            class="form-control"
+                            placeholder="input your comment"
+                            id="testarea2"
+                            required
+                            data-validation-required-message="Please input your content"
+                            rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">Category</label>
+                    <select class="form-control" id="exampleFormControlSelect1" th:field="*{category}">
+                        <option th:each="c : ${categoryList}" th:value="${c}" th:text="${c}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit"
+                            class="btn btn-primary"
+                            id="sendMessageButton">
+                        send
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--editpost fragment-->
+<div class="container" th:fragment="editpost">
+    <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+            <form th:action="@{'/edit/'+${post.id}}"
+                  th:object="${post}"
+                  th:method="put"
+                  name="sentMessage" id="contactForm" novalidate>
+                <div class="form-group">
+                    <label for="testarea1">Title</label>
+                    <input type="text"
+                           th:field="*{title}"
+                           class="form-control"
+                           id="testarea1"
+                           rows="3"
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="testarea2">Content</label>
+                    <textarea
+                            th:field="*{content}"
+                            class="form-control"
+                            id="testarea2"
+                            rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">Category</label>
+                    <select class="form-control" id="exampleFormControlSelect1" th:field="*{category}">
+                        <option th:each="c : ${categoryList}" th:value="${c}" th:text="${c}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit"
+                            class="btn btn-primary"
+                            id="sendMessageButton">
+                        send
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--multipostcontent fragment-->
+<div class="row" th:fragment="multipostcontent">
+    <div class="col-lg-8 col-md-10 mx-auto">
+        <th:block th:each="post : ${posts}">
+            <div class="post-preview">
+                <a th:href="@{/post/}+${post.id}">
+                    <h2 class="post-title" th:text="${post.title}">
+                    </h2>
+                </a>
+                <p class="post-meta">Posted by
+                    <a href="#" th:text="${post.user.email}"></a>
+                <p class="post-meta" th:text="${post.category}"></p>
+                </p>
+            </div>
+            <hr>
+
+            <!-- Pager -->
+            <th:block th:if="${user.id} != -1">
+                <div class="clearfix">
+                    <form th:action="@{'/delete/'+${post.id}}" th:method="delete">
+                        <input class="btn btn-primary float-right" type="submit" value="Delete &rarr;">
+                    </form>
+                    <form th:action="@{'/edit/'+${post.id}}" th:method="get">
+                        <input class="btn btn-primary float-right" type="submit" value="Edit Post &rarr;">
+                    </form>
+                </div>
+            </th:block>
+        </th:block>
+    </div>
+</div>
+<!--singlepostcontent fragment-->
+<div class="container" th:fragment="singlepostcontent">
+    <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+            <p th:text="${post.content}"/>
+            <hr>
+            <div class="container>">
+                <h1 th:align="center">Coments</h1>
+
+                <div class="row" th:each="comment : ${post.comments}">
+                    <div class="col-lg-8 col-md-10 mx-auto">
+                        <p th:text="${comment.message}"/>
+                        <p th:text="${comment.user.email}"/>
+                    </div>
+                </div>
+                <div class="row" th:if="${post.comments.size()} == 0">
+                    <div class="col-lg-8 col-md-10 mx-auto">
+                        <p>
+                        <h1 th:align="center">BRAK KOMENTARZY</h1></p>
+                    </div>
+                </div>
+            </div>
+            <hr>
+
+            <h1 th:align="center">Add comment</h1>
+            <article th:if="${user.id} != -1">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-10 mx-auto">
+                            <form th:align="center"
+                                  th:action="@{'/addComment/' + ${post.getId()} + '/'+${user.id}"
+                                  th:object="${comment}"
+                                  th:method="post"
+                                  name="sentMessage" id="contactForm" novalidate>
+                                <div class="control-group">
+                                    <div class="form-group floating-label-form-group controls">
+                                        <input th:align="center" type="text"
+                                               th:field="*{message}"
+                                               class="form-control"
+                                               placeholder="input your comment"
+                                               id="name"
+                                               required
+                                               data-validation-required-message="Please input your message">
+                                        <br>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit"
+                                            class="btn btn-primary"
+                                            id="sendMessageButton">
+                                        send
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+
+        </div>
+    </div>
+</div>
+<!--singup fragment-->
+<div class="container" th:fragment="singup">
+    <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+            <form th:action="@{/adduser}"
+                  th:object="${newuser}"
+                  th:method="post">
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="text"
+                           th:field="*{email}"
+                           class="form-control"
+                           placeholder="e-mail"
+                           id="email"
+                           rows="3">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password"
+                           th:field="*{password}"
+                           class="form-control"
+                           placeholder="Password"
+                           id="password"
+                           rows="3">
+                </div>
+
+                <div class="form-group">
+                    <button type="submit"
+                            class="btn btn-primary"
+                            id="sendMessageButton">
+                        Sing Up
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

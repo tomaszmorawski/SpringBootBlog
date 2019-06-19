@@ -32,7 +32,10 @@ public class PostsController {
         User user = getUserFromSession(httpSession);
         model.addAttribute("user",user);
         model.addAttribute("posts",posts);
-        return "posts";
+        model.addAttribute("content", "multipostcontent");
+        model.addAttribute("header", "headermultipost");
+
+        return "index";
     }
 
 
@@ -44,7 +47,10 @@ public class PostsController {
         List<CategoryEnum> categoryEnum = new ArrayList<>(Arrays.asList(CategoryEnum.values()));
         model.addAttribute("categoryList",categoryEnum);
         model.addAttribute("post", new Post());
-        return "addpost";
+
+        model.addAttribute("content", "addpost");
+        model.addAttribute("header", "headeraddpost");
+        return "index";
     }
 
     @PostMapping("/addPost/{user_id}")
@@ -62,7 +68,10 @@ public class PostsController {
         List<Comment> comments = postService.getAllComentsForPost(id);
         model.addAttribute("post",post);
         model.addAttribute("comment",new Comment());
-        return "post";
+
+        model.addAttribute("content", "singlepostcontent");
+        model.addAttribute("header", "headersinglepost");
+        return "index";
     }
 
     @PostMapping("/addComment/{post_id}/{user_id}")
@@ -96,7 +105,10 @@ public class PostsController {
                 model.addAttribute("categoryList", categoryEnum);
                 Post post = postService.getPost(post_id);
                 model.addAttribute("post", post);
-                return "edit";
+
+                model.addAttribute("content", "editpost");
+                model.addAttribute("header", "headeraddpost");
+                return "index";
             }
 
         }

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.springframework.org/schema/security">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<header class="masthead" style="background-image: url('img/post-bg.jpg')" th:fragment="headeraddpost">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="post-heading">
+                    <h1>Add Post</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<header class="masthead" style="background-image: url('img/home-bg.jpg')" th:fragment="headermultipost">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="site-heading">
+                    <h1>My Java Blog</h1>
+                    <span class="subheading">Mój portal blogowy stworzony w języku Java za pomocą Spring Boot'a</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<header class="masthead" style="background-image: url('../../img/post-bg.jpg')" th:fragment="headersinglepost">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="post-heading">
+                    <h1 th:text="${post.title}"/>
+                    <h2 th:text="${post.user.email}"/>
+                    <p th:text="${post.category}"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+</body>
+</html>

@@ -1,9 +1,7 @@
 package me.spiochu.blog.configuration;
 
-import me.spiochu.blog.Services.MyUserDetailsService;
 import me.spiochu.blog.handlers.MyAuthorityLoginSuccessHandler;
 import me.spiochu.blog.handlers.MyLogoutSuccessHandler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -38,7 +36,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.authorizeRequests()
                 .antMatchers("/login").permitAll()
-                .antMatchers("/addPost*").hasAnyAuthority("ADMIN")
+                .antMatchers("/addPost*").hasAnyAuthority("USER")
                 .antMatchers("/**").permitAll()
                 .and()
                 .formLogin().successHandler(myAuthorityLoginSuccessHandler)

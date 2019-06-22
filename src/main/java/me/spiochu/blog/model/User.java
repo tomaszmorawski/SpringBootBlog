@@ -20,12 +20,15 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @NotBlank(message = "E-mail is mandatory")
     @Email(message = "Invalid e-mail")
     private String email;
     @NotBlank(message = "Password is mandatory")
-    @Size(min = 6)
+    @Size(min = 6, message = "Password is to short")
     private String password;
     @Transient
+    @NotBlank(message = "Repeated password is mandatory")
+    @Size(min = 6, message = "Repeated password is to short")
     private String password_confirm;
     private LocalDateTime register_date = LocalDateTime.now();
     private boolean activity = false;

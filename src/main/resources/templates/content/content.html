@@ -196,12 +196,12 @@
                   th:object="${newuser}"
                   th:method="post">
                 <div class="form-group">
-                    <label for="email">E-mail</label>
+                    <label for="e-mail">E-mail</label>
                     <input type="text"
                            th:field="*{email}"
                            class="form-control"
                            placeholder="e-mail"
-                           id="email"
+                           id="e-mail"
                            rows="3">
                     <small class="form-text text-muted alert-danger" th:errors="*{email}">error</small>
                 </div>

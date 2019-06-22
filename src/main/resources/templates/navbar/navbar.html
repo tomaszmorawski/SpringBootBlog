@@ -4,8 +4,7 @@
 </head>
 <body>
 <div class="container" th:fragment="navbar">
-    <a th:if="auth!=null" class="navbar-brand" th:href="@{/}" th:text="${user.email}"></a>
-    <a th:if="auth==null" class="navbar-brand" th:href="@{/}" th:text="nnn"></a>
+    <a class="navbar-brand" th:href="@{/}" th:text="${user.email}"></a>
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
             data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
             aria-label="Toggle navigation">

@@ -3,7 +3,6 @@ package me.spiochu.blog.Controller;
 import me.spiochu.blog.Services.UserService;
 import me.spiochu.blog.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,22 +37,28 @@ public class UserController {
     }
 
     @PostMapping("/adduser")
-    public String addUser(@ModelAttribute @Valid User newUser, BindingResult result, Model model, HttpSession session, Authentication auth) {
-        model.addAttribute("auth", auth);
-        if (result.hasErrors() || !newUser.getPassword().equals(newUser.getPassword_confirm())) {
+    public String addUser(@ModelAttribute("newuser") @Valid User newuser, BindingResult result,
+                          Model model, HttpSession session) {
+
+        if (result.hasErrors() ||
+                !newuser.getPassword().equals(newuser.getPassword_confirm()) ||
+                userService.isUserExistByEmail(newuser.getEmail())) {
+            if (userService.isUserExistByEmail(newuser.getEmail())) {
+                result.rejectValue("email", null, "There is already an account registered with that email");
+            }
+            System.out.println(result.getFieldErrors());
             User user = getUserFromSession(session);
             model.addAttribute("user", user);
-            model.addAttribute("newuser", newUser);
             model.addAttribute("content", "singup");
             model.addAttribute("header", "headersingup");
-            if (!newUser.getPassword().equals(newUser.getPassword_confirm())) {
+            if (!newuser.getPassword().equals(newuser.getPassword_confirm())) {
                 model.addAttribute("password_error", "Password not mach");
             }
 
             return "index";
         }
 
-        userService.addUser(newUser);
+        userService.addUser(newuser);
         User user = getUserFromSession(session);
         model.addAttribute("user", user);
         return "redirect:/";

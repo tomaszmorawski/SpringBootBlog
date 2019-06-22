@@ -20,4 +20,8 @@ public class UserService {
         userRepository.save(newUser);
 
     }
+
+    public boolean isUserExistByEmail(String email) {
+        return userRepository.findByEmail(email) != null;
+    }
 }

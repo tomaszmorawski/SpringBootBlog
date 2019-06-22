@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +23,10 @@ public class User {
     @Email(message = "Invalid e-mail")
     private String email;
     @NotBlank(message = "Password is mandatory")
+    @Size(min = 6)
     private String password;
+    @Transient
+    private String password_confirm;
     private LocalDateTime register_date = LocalDateTime.now();
     private boolean activity = false;
 

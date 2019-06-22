@@ -3,10 +3,12 @@ package me.spiochu.blog.Controller;
 import me.spiochu.blog.Services.UserService;
 import me.spiochu.blog.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
@@ -36,10 +38,17 @@ public class UserController {
     }
 
     @PostMapping("/adduser")
-    public String addUser(@Valid User newUser, BindingResult result, Model model, HttpSession session) {
-        if (result.hasErrors()) {
+    public String addUser(@ModelAttribute @Valid User newUser, BindingResult result, Model model, HttpSession session, Authentication auth) {
+        model.addAttribute("auth", auth);
+        if (result.hasErrors() || !newUser.getPassword().equals(newUser.getPassword_confirm())) {
+            User user = getUserFromSession(session);
+            model.addAttribute("user", user);
+            model.addAttribute("newuser", newUser);
             model.addAttribute("content", "singup");
             model.addAttribute("header", "headersingup");
+            if (!newUser.getPassword().equals(newUser.getPassword_confirm())) {
+                model.addAttribute("password_error", "Password not mach");
+            }
 
             return "index";
         }

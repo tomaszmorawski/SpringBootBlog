@@ -129,14 +129,14 @@
 <div class="container" th:fragment="singlepostcontent">
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-            <p th:text="${post.content}"/>
+            <p th:utext="${post.content}"/>
             <hr>
             <div class="container>">
                 <h1 th:align="center">Coments</h1>
 
                 <div class="row" th:each="comment : ${post.comments}">
                     <div class="col-lg-8 col-md-10 mx-auto">
-                        <p th:text="${comment.message}"/>
+                        <p th:utext="${comment.message}"/>
                         <p th:text="${comment.user.email}"/>
                     </div>
                 </div>

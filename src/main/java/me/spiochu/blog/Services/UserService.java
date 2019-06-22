@@ -35,7 +35,7 @@ public class UserService {
             mailService.sendMailTo(newUser.getEmail(), "Registration",
                     "Click link below to activate you account !" +
                             "<br>" +
-                            "<a href='http://localhost:8080/activate/" +
+                            "<a href='https://thespiochu.herokuapp.com/activate/" +
                             newUser.getRegistrationToken() +
                             "'>Click IT</a>");
         } catch (MessagingException e) {

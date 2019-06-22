@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
@@ -64,6 +65,17 @@ public class UserController {
         return "redirect:/";
     }
 
+    @GetMapping("/activate/{token}")
+    public String tokenActivation(Model model, @PathVariable String token) {
+        User user = userService.activateUserByToken(token);
+        model.addAttribute("user", user);
+        return "redirect:/";
+    }
+
+   /* @GetMapping("/user/{user_id}")
+    public String userDetails(@PathVariable Long user_id, Model model){
+
+    }*/
 
     private User getUserFromSession(HttpSession httpSession) {
         User user = (User) httpSession.getAttribute("user");
@@ -74,4 +86,5 @@ public class UserController {
         }
         return user;
     }
+
 }

@@ -26,9 +26,11 @@ public class MyUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(s);
         if (user != null){
             return org.springframework.security.core.userdetails.User.withUsername(s)
-                    .disabled(false)
+                    .disabled(!user.isActivity())
                     .password(user.getPassword())
+/*
                     .roles(user.getRoles().stream().map(Role::getRole_name).toArray(String[]::new))
+*/
                     .authorities(user.getRoles().stream().map(Role::getRole_name).toArray(String[]::new))
                     .build();
         }else {

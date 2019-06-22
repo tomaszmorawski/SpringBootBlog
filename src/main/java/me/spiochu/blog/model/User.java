@@ -18,7 +18,7 @@ import java.util.Set;
 @Entity
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank(message = "E-mail is mandatory")
     @Email(message = "Invalid e-mail")
@@ -30,6 +30,7 @@ public class User {
     @NotBlank(message = "Repeated password is mandatory")
     @Size(min = 6, message = "Repeated password is to short")
     private String password_confirm;
+    private String registrationToken;
     private LocalDateTime register_date = LocalDateTime.now();
     private boolean activity = false;
 
@@ -54,6 +55,8 @@ public class User {
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", password_confirm='" + password_confirm + '\'' +
+                ", registrationToken='" + registrationToken + '\'' +
                 ", register_date=" + register_date +
                 ", activity=" + activity +
                 ", roles=" + roles +

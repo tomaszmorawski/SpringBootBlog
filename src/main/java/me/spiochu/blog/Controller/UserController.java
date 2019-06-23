@@ -3,6 +3,7 @@ package me.spiochu.blog.Controller;
 import me.spiochu.blog.Services.UserService;
 import me.spiochu.blog.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -73,7 +74,10 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String login(Authentication authentication) {
+        if (authentication != null) {
+            return "redirect:/";
+        }
         return "login";
     }
 

@@ -26,9 +26,13 @@ public class MyAuthorityLoginSuccessHandler implements AuthenticationSuccessHand
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest,
                                         HttpServletResponse httpServletResponse,
                                         Authentication authentication) throws IOException, ServletException {
+        System.out.println(authentication.getName());
+        System.out.println(authentication.getPrincipal());
         HttpSession httpSession = httpServletRequest.getSession();
         User user = userRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("user",user);
         httpServletResponse.sendRedirect("/");
     }
+
+
 }

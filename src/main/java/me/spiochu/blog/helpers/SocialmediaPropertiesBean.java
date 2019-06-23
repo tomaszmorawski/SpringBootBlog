@@ -35,6 +35,18 @@ public class SocialmediaPropertiesBean {
         return new ResourceServerProperties();
     }
 
+    @Bean
+    @ConfigurationProperties("facebook.client")
+    public AuthorizationCodeResourceDetails facebook() {
+        return new AuthorizationCodeResourceDetails();
+    }
+
+    @Bean
+    @ConfigurationProperties("facebook.resource")
+    public ResourceServerProperties facebookResource() {
+        return new ResourceServerProperties();
+    }
+
 
     @Bean
     public FilterRegistrationBean<OAuth2ClientContextFilter> oAuth2ClientContextFilterFilterRegistration(OAuth2ClientContextFilter filter) {

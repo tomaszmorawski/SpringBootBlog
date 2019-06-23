@@ -17,44 +17,50 @@ import java.util.List;
 @Configuration
 public class SocialmediaLoginFilter {
 
-    private AuthorizationCodeResourceDetails google;
-    private ResourceServerProperties googleResources;
-    private AuthorizationCodeResourceDetails github;
-    private ResourceServerProperties githubResource;
-    private OAuth2ClientContext oAuth2ClientContext;
+    private final AuthorizationCodeResourceDetails google;
+    private final ResourceServerProperties googleResources;
+    private final AuthorizationCodeResourceDetails github;
+    private final ResourceServerProperties githubResource;
+    private final AuthorizationCodeResourceDetails facebook;
+    private final ResourceServerProperties facebookResource;
+    private final OAuth2ClientContext oAuth2ClientContext;
+
 
     public SocialmediaLoginFilter(AuthorizationCodeResourceDetails google,
                                   ResourceServerProperties googleResources,
                                   AuthorizationCodeResourceDetails github,
                                   ResourceServerProperties githubResource,
-                                  @Qualifier("oauth2ClientContext") OAuth2ClientContext oAuth2ClientContext) {
+                                  @Qualifier("oauth2ClientContext") OAuth2ClientContext oAuth2ClientContext,
+                                  AuthorizationCodeResourceDetails facebook,
+                                  ResourceServerProperties facebookResource) {
         this.google = google;
         this.googleResources = googleResources;
         this.github = github;
         this.githubResource = githubResource;
         this.oAuth2ClientContext = oAuth2ClientContext;
+        this.facebook = facebook;
+        this.facebookResource = facebookResource;
     }
 
     public Filter authFilter() {
         CompositeFilter filter = new CompositeFilter();
         List<Filter> filters = new ArrayList<>();
-        OAuth2ClientAuthenticationProcessingFilter facebookFilter = new OAuth2ClientAuthenticationProcessingFilter("/login/google");
-        OAuth2RestTemplate facebookTemplate = new OAuth2RestTemplate(google, oAuth2ClientContext);
-        facebookFilter.setRestTemplate(facebookTemplate);
+        OAuth2ClientAuthenticationProcessingFilter googleFilter = new OAuth2ClientAuthenticationProcessingFilter("/login/google");
+        OAuth2RestTemplate googleTemplate = new OAuth2RestTemplate(google, oAuth2ClientContext);
+        googleFilter.setRestTemplate(googleTemplate);
         UserInfoTokenServices tokenServices = new UserInfoTokenServices(googleResources.getUserInfoUri(), google.getClientId());
-        tokenServices.setRestTemplate(facebookTemplate);
-        facebookFilter.setTokenServices(tokenServices);
-        filters.add(facebookFilter);
+        tokenServices.setRestTemplate(googleTemplate);
+        googleFilter.setTokenServices(tokenServices);
+        filters.add(googleFilter);
 
 
-       /*OAuth2ClientAuthenticationProcessingFilter facebookFilter = new OAuth2ClientAuthenticationProcessingFilter("/login/facebook");
-        OAuth2RestTemplate facebookTemplate = new OAuth2RestTemplate(facebook, oauth2ClientContext);
+        OAuth2ClientAuthenticationProcessingFilter facebookFilter = new OAuth2ClientAuthenticationProcessingFilter("/login/facebook");
+        OAuth2RestTemplate facebookTemplate = new OAuth2RestTemplate(facebook, oAuth2ClientContext);
         facebookFilter.setRestTemplate(facebookTemplate);
-        UserInfoTokenServices tokenServices = new UserInfoTokenServices(facebookResource.getUserInfoUri(), facebook.getClientId());
+        tokenServices = new UserInfoTokenServices(facebookResource.getUserInfoUri(), facebook.getClientId());
         tokenServices.setRestTemplate(facebookTemplate);
         facebookFilter.setTokenServices(tokenServices);
         filters.add(facebookFilter);
-*/
         OAuth2ClientAuthenticationProcessingFilter githubFilter = new OAuth2ClientAuthenticationProcessingFilter("/login/github");
         OAuth2RestTemplate githubTemplate = new OAuth2RestTemplate(github, oAuth2ClientContext);
         githubFilter.setRestTemplate(githubTemplate);

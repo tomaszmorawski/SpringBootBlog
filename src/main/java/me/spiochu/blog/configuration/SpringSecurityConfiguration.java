@@ -3,11 +3,11 @@ package me.spiochu.blog.configuration;
 import me.spiochu.blog.filters.SocialmediaLoginFilter;
 import me.spiochu.blog.handlers.MyAuthorityLoginSuccessHandler;
 import me.spiochu.blog.handlers.MyLogoutSuccessHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-@EnableWebSecurity
 @EnableOAuth2Client
 @Configuration
 public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -35,6 +34,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
         this.socialmediaLoginFilter = socialmediaLoginFilter;
     }
 
+    @Autowired
     public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
         authenticationManagerBuilder.userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
@@ -42,7 +42,6 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     public void configure(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.authorizeRequests()
-                .antMatchers("/login").permitAll()
                 .antMatchers("/addPost*").hasAnyRole("USER")
                 .antMatchers("/**").permitAll()
                 .and()

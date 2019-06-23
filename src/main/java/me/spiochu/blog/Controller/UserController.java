@@ -72,10 +72,10 @@ public class UserController {
         return "redirect:/";
     }
 
-   /* @GetMapping("/user/{user_id}")
-    public String userDetails(@PathVariable Long user_id, Model model){
-
-    }*/
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
 
     private User getUserFromSession(HttpSession httpSession) {
         User user = (User) httpSession.getAttribute("user");

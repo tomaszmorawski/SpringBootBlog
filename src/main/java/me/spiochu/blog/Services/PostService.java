@@ -7,6 +7,7 @@ import me.spiochu.blog.repository.CommentRepository;
 import me.spiochu.blog.repository.PostRepository;
 import me.spiochu.blog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class PostService {
     }
 
     public List<Post> getAll() {
-        return postRepository.findAll();
+        return postRepository.findAll(Sort.by("id").descending());
     }
 
     public Post getPost(Long id) {

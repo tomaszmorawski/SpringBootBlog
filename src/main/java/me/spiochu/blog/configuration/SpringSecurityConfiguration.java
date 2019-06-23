@@ -1,8 +1,8 @@
 package me.spiochu.blog.configuration;
 
+import me.spiochu.blog.filters.SocialmediaLoginFilter;
 import me.spiochu.blog.handlers.MyAuthorityLoginSuccessHandler;
 import me.spiochu.blog.handlers.MyLogoutSuccessHandler;
-import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,22 +12,27 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @EnableWebSecurity
-@EnableOAuth2Sso
+@EnableOAuth2Client
 @Configuration
 public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     UserDetailsService userDetailsService;
     MyAuthorityLoginSuccessHandler myAuthorityLoginSuccessHandler;
     MyLogoutSuccessHandler myLogoutSuccessHandler;
+    SocialmediaLoginFilter socialmediaLoginFilter;
 
     public SpringSecurityConfiguration(UserDetailsService userDetailsService,
                                        MyAuthorityLoginSuccessHandler myAuthorityLoginSuccessHandler,
-                                       MyLogoutSuccessHandler myLogoutSuccessHandler) {
+                                       MyLogoutSuccessHandler myLogoutSuccessHandler,
+                                       SocialmediaLoginFilter socialmediaLoginFilter) {
         this.userDetailsService = userDetailsService;
         this.myAuthorityLoginSuccessHandler = myAuthorityLoginSuccessHandler;
         this.myLogoutSuccessHandler = myLogoutSuccessHandler;
+        this.socialmediaLoginFilter = socialmediaLoginFilter;
     }
 
     public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
@@ -45,7 +50,8 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout().logoutSuccessHandler(myLogoutSuccessHandler).permitAll()
                 .and()
-                .csrf().disable();
+                .csrf().disable()
+                .addFilterBefore(socialmediaLoginFilter.authFilter(), BasicAuthenticationFilter.class);
     }
 
     @Bean

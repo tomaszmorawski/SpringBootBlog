@@ -23,6 +23,18 @@ public class SocialmediaPropertiesBean {
         return new ResourceServerProperties();
     }
 
+    @Bean
+    @ConfigurationProperties("github.client")
+    public AuthorizationCodeResourceDetails github() {
+        return new AuthorizationCodeResourceDetails();
+    }
+
+    @Bean
+    @ConfigurationProperties("github.resource")
+    public ResourceServerProperties githubResource() {
+        return new ResourceServerProperties();
+    }
+
 
     @Bean
     public FilterRegistrationBean<OAuth2ClientContextFilter> oAuth2ClientContextFilterFilterRegistration(OAuth2ClientContextFilter filter) {

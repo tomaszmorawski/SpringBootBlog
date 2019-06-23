@@ -19,13 +19,19 @@ public class SocialmediaLoginFilter {
 
     private AuthorizationCodeResourceDetails google;
     private ResourceServerProperties googleResources;
+    private AuthorizationCodeResourceDetails github;
+    private ResourceServerProperties githubResource;
     private OAuth2ClientContext oAuth2ClientContext;
 
     public SocialmediaLoginFilter(AuthorizationCodeResourceDetails google,
                                   ResourceServerProperties googleResources,
+                                  AuthorizationCodeResourceDetails github,
+                                  ResourceServerProperties githubResource,
                                   @Qualifier("oauth2ClientContext") OAuth2ClientContext oAuth2ClientContext) {
         this.google = google;
         this.googleResources = googleResources;
+        this.github = github;
+        this.githubResource = githubResource;
         this.oAuth2ClientContext = oAuth2ClientContext;
     }
 
@@ -41,21 +47,21 @@ public class SocialmediaLoginFilter {
         filters.add(facebookFilter);
 
 
-       /* OAuth2ClientAuthenticationProcessingFilter facebookFilter = new OAuth2ClientAuthenticationProcessingFilter("/login/facebook");
+       /*OAuth2ClientAuthenticationProcessingFilter facebookFilter = new OAuth2ClientAuthenticationProcessingFilter("/login/facebook");
         OAuth2RestTemplate facebookTemplate = new OAuth2RestTemplate(facebook, oauth2ClientContext);
         facebookFilter.setRestTemplate(facebookTemplate);
         UserInfoTokenServices tokenServices = new UserInfoTokenServices(facebookResource.getUserInfoUri(), facebook.getClientId());
         tokenServices.setRestTemplate(facebookTemplate);
         facebookFilter.setTokenServices(tokenServices);
         filters.add(facebookFilter);
-
+*/
         OAuth2ClientAuthenticationProcessingFilter githubFilter = new OAuth2ClientAuthenticationProcessingFilter("/login/github");
-        OAuth2RestTemplate githubTemplate = new OAuth2RestTemplate(github, oauth2ClientContext);
+        OAuth2RestTemplate githubTemplate = new OAuth2RestTemplate(github, oAuth2ClientContext);
         githubFilter.setRestTemplate(githubTemplate);
         tokenServices = new UserInfoTokenServices(githubResource.getUserInfoUri(), github.getClientId());
         tokenServices.setRestTemplate(githubTemplate);
         githubFilter.setTokenServices(tokenServices);
-        filters.add(githubFilter);*/
+        filters.add(githubFilter);
 
         filter.setFilters(filters);
         return filter;

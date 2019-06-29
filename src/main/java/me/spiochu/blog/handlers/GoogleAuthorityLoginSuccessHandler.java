@@ -24,8 +24,10 @@ public class GoogleAuthorityLoginSuccessHandler implements AuthenticationSuccess
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest,
                                         HttpServletResponse httpServletResponse,
                                         Authentication authentication) throws IOException, ServletException {
+        System.out.println("----------------------------------------------------------------------------------");
         System.out.println(authentication.getName());
         System.out.println(authentication.getPrincipal());
+        System.out.println("----------------------------------------------------------------------------------");
         HttpSession httpSession = httpServletRequest.getSession();
         User user = userRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("user", user);

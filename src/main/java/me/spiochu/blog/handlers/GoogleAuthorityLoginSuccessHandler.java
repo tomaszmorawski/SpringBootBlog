@@ -1,5 +1,6 @@
 package me.spiochu.blog.handlers;
 
+import me.spiochu.blog.helpers.OAuth2EmailToUserHelper;
 import me.spiochu.blog.model.User;
 import me.spiochu.blog.repository.UserRepository;
 import org.springframework.security.core.Authentication;
@@ -11,13 +12,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.security.Principal;
 
 @Component
 public class GoogleAuthorityLoginSuccessHandler implements AuthenticationSuccessHandler {
     private final UserRepository userRepository;
+    private OAuth2EmailToUserHelper oAuth2EmailToUserHelper;
 
-    public GoogleAuthorityLoginSuccessHandler(UserRepository userRepository) {
+    public GoogleAuthorityLoginSuccessHandler(UserRepository userRepository, OAuth2EmailToUserHelper oAuth2EmailToUserHelper) {
         this.userRepository = userRepository;
+        this.oAuth2EmailToUserHelper = oAuth2EmailToUserHelper;
     }
 
     @Override
@@ -25,11 +29,11 @@ public class GoogleAuthorityLoginSuccessHandler implements AuthenticationSuccess
                                         HttpServletResponse httpServletResponse,
                                         Authentication authentication) throws IOException, ServletException {
         System.out.println("----------------------------------------------------------------------------------");
-        System.out.println(authentication.getName());
-        System.out.println(authentication.getPrincipal());
+        oAuth2EmailToUserHelper.setOAuthUser((Principal) authentication.getPrincipal());
+        System.out.println(oAuth2EmailToUserHelper.getEmail());
         System.out.println("----------------------------------------------------------------------------------");
         HttpSession httpSession = httpServletRequest.getSession();
-        User user = userRepository.findByEmail(authentication.getName());
+        User user = userRepository.findByEmail(oAuth2EmailToUserHelper.getEmail());
         httpSession.setAttribute("user", user);
         httpServletResponse.sendRedirect("/");
     }

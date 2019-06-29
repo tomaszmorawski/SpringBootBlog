@@ -1,5 +1,6 @@
 package me.spiochu.blog.filters;
 
+import me.spiochu.blog.handlers.GoogleAuthorityLoginSuccessHandler;
 import me.spiochu.blog.handlers.MyAuthorityLoginSuccessHandler;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
@@ -26,6 +27,7 @@ public class SocialmediaLoginFilter {
     private final ResourceServerProperties facebookResource;
     private final OAuth2ClientContext oAuth2ClientContext;
     private final MyAuthorityLoginSuccessHandler myAuthorityLoginSuccessHandler;
+    private final GoogleAuthorityLoginSuccessHandler googleAuthorityLoginSuccessHandler;
 
 
     public SocialmediaLoginFilter(AuthorizationCodeResourceDetails google,
@@ -35,7 +37,8 @@ public class SocialmediaLoginFilter {
                                   @Qualifier("oauth2ClientContext") OAuth2ClientContext oAuth2ClientContext,
                                   AuthorizationCodeResourceDetails facebook,
                                   ResourceServerProperties facebookResource,
-                                  MyAuthorityLoginSuccessHandler myAuthorityLoginSuccessHandler) {
+                                  MyAuthorityLoginSuccessHandler myAuthorityLoginSuccessHandler,
+                                  GoogleAuthorityLoginSuccessHandler googleAuthorityLoginSuccessHandler) {
         this.google = google;
         this.googleResources = googleResources;
         this.github = github;
@@ -44,6 +47,7 @@ public class SocialmediaLoginFilter {
         this.facebook = facebook;
         this.facebookResource = facebookResource;
         this.myAuthorityLoginSuccessHandler = myAuthorityLoginSuccessHandler;
+        this.googleAuthorityLoginSuccessHandler = googleAuthorityLoginSuccessHandler;
     }
 
     public Filter authFilter() {
@@ -56,7 +60,7 @@ public class SocialmediaLoginFilter {
         UserInfoTokenServices tokenServices = new UserInfoTokenServices(googleResources.getUserInfoUri(), google.getClientId());
         tokenServices.setRestTemplate(googleTemplate);
         googleFilter.setTokenServices(tokenServices);
-        /*googleFilter.setAuthenticationSuccessHandler(myAuthorityLoginSuccessHandler);*/
+        googleFilter.setAuthenticationSuccessHandler(googleAuthorityLoginSuccessHandler);
         filters.add(googleFilter);
 
 

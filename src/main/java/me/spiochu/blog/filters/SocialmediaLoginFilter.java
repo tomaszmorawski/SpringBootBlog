@@ -55,7 +55,7 @@ public class SocialmediaLoginFilter {
         UserInfoTokenServices tokenServices = new UserInfoTokenServices(googleResources.getUserInfoUri(), google.getClientId());
         tokenServices.setRestTemplate(googleTemplate);
         googleFilter.setTokenServices(tokenServices);
-        googleFilter.setAuthenticationSuccessHandler(myAuthorityLoginSuccessHandler);
+        /*googleFilter.setAuthenticationSuccessHandler(myAuthorityLoginSuccessHandler);*/
         filters.add(googleFilter);
 
 

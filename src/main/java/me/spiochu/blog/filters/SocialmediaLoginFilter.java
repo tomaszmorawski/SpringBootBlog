@@ -70,6 +70,7 @@ public class SocialmediaLoginFilter {
         tokenServices = new UserInfoTokenServices(facebookResource.getUserInfoUri(), facebook.getClientId());
         tokenServices.setRestTemplate(facebookTemplate);
         facebookFilter.setTokenServices(tokenServices);
+        facebookFilter.setAuthenticationSuccessHandler(googleAuthorityLoginSuccessHandler);
         filters.add(facebookFilter);
 
         OAuth2ClientAuthenticationProcessingFilter githubFilter = new OAuth2ClientAuthenticationProcessingFilter("/login/github");
@@ -78,6 +79,7 @@ public class SocialmediaLoginFilter {
         tokenServices = new UserInfoTokenServices(githubResource.getUserInfoUri(), github.getClientId());
         tokenServices.setRestTemplate(githubTemplate);
         githubFilter.setTokenServices(tokenServices);
+        githubFilter.setAuthenticationSuccessHandler(googleAuthorityLoginSuccessHandler);
         filters.add(githubFilter);
 
         filter.setFilters(filters);

@@ -18,7 +18,7 @@ public class SocialmediaPropertiesBean {
     }
 
     @Bean
-    @ConfigurationProperties("google.resources")
+    @ConfigurationProperties("google.resource")
     public ResourceServerProperties googleResources() {
         return new ResourceServerProperties();
     }
